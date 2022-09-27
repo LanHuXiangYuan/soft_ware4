@@ -22,6 +22,7 @@ public class Main {
     public static void main(String[] args) {
         if(args.length!=2){ return ; }
         Set<String> formulas= new HashSet<String>(Integer.parseInt(args[0])*2);
+
         generate(Integer.valueOf(args[0]),Integer.valueOf(args[1]),formulas);
         output(Integer.valueOf(args[0]),formulas);
     }
@@ -64,9 +65,6 @@ public class Main {
     }
 
     private static void generate(Integer num,Integer range,Set<String> formulas) {
-        System.out.println("num:"+num);
-        System.out.println("range:"+range);
-
         //从范围内选择不重复的随机数
         Set<Integer> hs = new HashSet<Integer>();
         Random r = new Random();
