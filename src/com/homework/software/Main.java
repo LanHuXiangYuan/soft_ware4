@@ -20,7 +20,9 @@ public class Main {
 
 
     public static void main(String[] args) {
-        if(args.length!=2){ return ; }
+        if(args.length!=2){
+            System.out.println("输入参数不为2");
+            return ; }
         Set<String> formulas= new HashSet<String>(Integer.parseInt(args[0])*2);
 
         generate(Integer.valueOf(args[0]),Integer.valueOf(args[1]),formulas);
@@ -39,6 +41,8 @@ public class Main {
             i++;
             if(i==num+1)break;
         }
+        System.out.println(exercises.toString());
+        System.out.println(ans.toString());
         writeAnswer(exercises.toString(),EXERCISE_ADDRESS);
         writeAnswer(ans.toString(),ANSWER_ADDRESS);
     }
