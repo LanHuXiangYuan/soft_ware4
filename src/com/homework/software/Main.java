@@ -39,19 +39,52 @@ public class Main {
         String[] exercises = exercise.split("\\r?\\n");
         ArrayList<String> exercisesAnswer=calculate(exercises);
         String[] answers = answer.split("\\r?\\n");
-        for(int i=answers.length-1; i>-1 ;i--){
+
+        ArrayList<Integer> corrects=new ArrayList<Integer>(answers.length>>2);
+        ArrayList<Integer> wrongs=new ArrayList<Integer>(answers.length>>2);
+        for(int i=answers.length-2; i>-1 ;i--){
             if(exercisesAnswer.get(i).equals(answers[i])){
-                return;
-            };
+                corrects.add(i+1);
+            }else {
+                wrongs.add(i+1);
+            }
         }
+        String result="Correct:"+corrects.size()
+                +corrects.toString()+"\n"+"Wrong:"
+                +wrongs.size()+wrongs.toString();
+        System.out.println(result);
     }
 
 
 
-
-
     private static ArrayList<String> calculate(String[] exercises) {
-        return new ArrayList<String>(exercises.length);
+        ArrayList<String> ans= new ArrayList<String>(exercises.length);
+        String first,second,operator="+";
+        for(int i=0;i<exercises.length-1;i++){
+            if(exercises[i].contains("+")) {
+                operator="+";}
+            else if(exercises[i].contains("-")){
+                operator="-";
+            }
+            else if(exercises[i].contains("*")){
+                operator="*";
+            }
+            else if(exercises[i].contains("/")){
+                operator="/";
+            }
+            first=StringUtils.substringAfter(StringUtils.substringBefore(exercises[i], operator), ":");
+            second=StringUtils.substringBefore(StringUtils.substringAfter(exercises[i], operator), "=");
+            String an = switch (operator) {
+                case "+" -> Integer.toString(Integer.parseInt(first) + Integer.parseInt(second));
+                case "-" -> Integer.toString(Integer.parseInt(first) - Integer.parseInt(second));
+                case "*" -> Integer.toString(Integer.parseInt(first) * Integer.parseInt(second));
+                case "/" -> first+ "/" + second;
+                default -> "0";
+            };
+            ans.add(an);
+        }
+
+        return ans;
     }
 
     private static void output(Integer num,Set<String> formulas) {
