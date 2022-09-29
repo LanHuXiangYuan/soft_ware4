@@ -20,13 +20,19 @@ public class Main {
 
 
     public static void main(String[] args) {
-        if(args.length!=2){
-            System.out.println("输入参数不为2");
+        if(args.length!=2&&args.length!=4){
+            System.out.println("输入参数不合法，请输入如10 10  或-e exercisefil.txt  -a answerfile.txt ");
             return ; }
+        if(args.length==4){
+            checkAnswer();
+            return;
+        }
         Set<String> formulas= new HashSet<String>(Integer.parseInt(args[0])*2);
-
         generate(Integer.valueOf(args[0]),Integer.valueOf(args[1]),formulas);
         output(Integer.valueOf(args[0]),formulas);
+    }
+
+    private static void checkAnswer() {
     }
 
     private static void output(Integer num,Set<String> formulas) {
@@ -41,8 +47,6 @@ public class Main {
             i++;
             if(i==num+1)break;
         }
-        System.out.println(exercises.toString());
-        System.out.println(ans.toString());
         writeAnswer(exercises.toString(),EXERCISE_ADDRESS);
         writeAnswer(ans.toString(),ANSWER_ADDRESS);
     }
@@ -83,12 +87,12 @@ public class Main {
                 if(j==3&&numbers.get(i - 1)==0)continue;
                 //利用数字numbers.get(i)和numbers.get(i-1)和OPERATORS生成算式
                 sb.delete(0,sb.length());
-                float count = switch (j) {
-                    case 0 -> numbers.get(i) + numbers.get(i - 1);
-                    case 1 -> numbers.get(i) - numbers.get(i - 1);
-                    case 2 -> numbers.get(i) * numbers.get(i - 1);
-                    case 3 -> (float)numbers.get(i) / (float)numbers.get(i - 1);
-                    default -> 0;
+                String count = switch (j) {
+                    case 0 -> Integer.toString(numbers.get(i) + numbers.get(i - 1));
+                    case 1 -> Integer.toString(numbers.get(i) - numbers.get(i - 1));
+                    case 2 -> Integer.toString(numbers.get(i) * numbers.get(i - 1));
+                    case 3 -> numbers.get(i) + "/" + numbers.get(i - 1);
+                    default -> "0";
                 };
                 sb.append(numbers.get(i))
                         .append(OPERATORS[j])
