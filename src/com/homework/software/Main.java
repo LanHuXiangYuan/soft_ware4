@@ -3,6 +3,7 @@ package com.homework.software;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -21,10 +22,10 @@ public class Main {
 
     public static void main(String[] args) {
         if(args.length!=2&&args.length!=4){
-            System.out.println("输入参数不合法，请输入如10 10  或-e exercisefil.txt  -a answerfile.txt ");
+            System.out.println("输入参数不合法，请输入如10 10  或-e exercisefile.txt  -a answerfile.txt ");
             return ; }
         if(args.length==4){
-            checkAnswer();
+            checkAnswer(args[1],args[3]);
             return;
         }
         Set<String> formulas= new HashSet<String>(Integer.parseInt(args[0])*2);
@@ -32,7 +33,25 @@ public class Main {
         output(Integer.valueOf(args[0]),formulas);
     }
 
-    private static void checkAnswer() {
+    private static void checkAnswer(String exercisefile,String answerfile) {
+        String exercise=new String(Objects.requireNonNull(FileUtils.readFile(exercisefile)));
+        String answer=new String(Objects.requireNonNull(FileUtils.readFile(answerfile)));
+        String[] exercises = exercise.split("\\r?\\n");
+        ArrayList<String> exercisesAnswer=calculate(exercises);
+        String[] answers = answer.split("\\r?\\n");
+        for(int i=answers.length-1; i>-1 ;i--){
+            if(exercisesAnswer.get(i).equals(answers[i])){
+                return;
+            };
+        }
+    }
+
+
+
+
+
+    private static ArrayList<String> calculate(String[] exercises) {
+        return new ArrayList<String>(exercises.length);
     }
 
     private static void output(Integer num,Set<String> formulas) {
@@ -47,30 +66,11 @@ public class Main {
             i++;
             if(i==num+1)break;
         }
-        writeAnswer(exercises.toString(),EXERCISE_ADDRESS);
-        writeAnswer(ans.toString(),ANSWER_ADDRESS);
+        FileUtils.writeAnswer(exercises.toString(),EXERCISE_ADDRESS);
+        FileUtils.writeAnswer(ans.toString(),ANSWER_ADDRESS);
     }
 
-    static public void writeAnswer(String answer,String address) {
-        File answer_file=new File(address);
-        if(!answer_file.exists()){
-            try {
-                answer_file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        byte[] bytes =answer.getBytes();
-        int b=bytes.length;  //是字节的长度，不是字符串的长度
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream(answer_file);
-            fileOutputStream.write(bytes,0,b);
-            fileOutputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private static void generate(Integer num,Integer range,Set<String> formulas) {
         //从范围内选择不重复的随机数
